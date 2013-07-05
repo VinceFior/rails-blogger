@@ -11,12 +11,10 @@ class ArticlesController < ApplicationController
   	@article = Article.new
   end
   def create
-  	@article = Article.new(
-  	  title: params[:article][:title],
-  	  body: params[:article][:body])
-  	@article.save
-  	flash.notice = "Article '#{@article.title}' Saved!"
-  	redirect_to article_path(@article)
+    @article = Article.new(params[:article].permit(:title, :body, :tag_list, :image))
+    @article.save
+    flash.notice = "Article '#{@article.title}' Saved!"
+    redirect_to article_path(@article)
   end
   def destroy
   	@article = Article.find(params[:id])
@@ -29,9 +27,7 @@ class ArticlesController < ApplicationController
   end
   def update
   	@article = Article.find(params[:id])
-  	@article.update_attributes(
-  		title: params[:article][:title],
-  		body: params[:article][:body])
+  	@article.update_attributes(params[:article].permit(:title, :body, :tag_list, :image))
   	flash.notice = "Article '#{@article.title}' Updated!"
   	redirect_to article_path(@article)
   end
